@@ -16,13 +16,17 @@ const expect = (received) => ({
 const it = (title, fn) => tests.push([title, fn]);
 
 const root = process.cwd();
+// 1. glob(本来であればglobを使う)
 const testFilePath = ["__test__/index.test.js"];
 
 for (file of testFilePath) {
-  // 1. glob(本来であればreadFileではなくglobを使う)
+  //2. setup(コードの評価。今回の場合`it`が実行される。)
+  // 本来はevalはつかわない && readFileもしないrequireやimportで行う。
+  // ex)
+  //    for (file of testFilePath) {
+  //       await import(file)
+  //
   const code = fs.readFileSync(`${root}/${file}`, "utf-8");
-
-  //2. setup(コードの評価。今回の場合`it`が実行される)
   eval(code);
 
   const results = [];
